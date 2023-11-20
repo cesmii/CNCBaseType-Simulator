@@ -26,7 +26,6 @@ SVCNAME=$SVCNAME.service
 if [ $(which systemctl) ]; then
     echo "Creating entry in /etc/systemd/system"
     SVCPATH=/etc/systemd/system/$SVCNAME
-    SVCPATH=$SCRIPT_DIR/$SVCNAME
     echo "[Unit]" > $SVCPATH
     echo "Description=CNCBaseType Simulator" >> $SVCPATH
     echo "" >> $SVCPATH
@@ -41,8 +40,8 @@ if [ $(which systemctl) ]; then
     systemctl daemon-reload
 
     echo "Starting Service"
-    systemctl enable cnc-sim.service
-    systemctl start cnc-sim.service
+    systemctl enable $SVCNAME.service
+    systemctl start $SVCNAME.service
 else
     echo "systemd not found, service could not be installed"
 fi
