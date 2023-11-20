@@ -2,9 +2,8 @@ Attr_Names,Model,SerialNumber,x,y,z,Machine State,Spindle Load,Spindle Motor RPM
 RPI ID,444526,444524,444544,444546,444545,444533,444543,444534,444537
 Profile,MachineInformation/Identification/Model,MachineInformation/Identification/SerialNumber,Channel1/PosTcs/PosTcsX,Channel1/PosTcs/PosTcsZ,Channel1/PosTcs/PosTcsZ,MachineInformation/Status/MachineState,SpindleList[0]/Motor/Loadrate,SpindleList[0]/Motor/RPM,MachineInformation/ToolInformation/ToolStatus/Feedrate
 Widget,Display Value,Display Value,Trend,Trend,Trend,Indicator or Display value,Gauge,Gauge,Trend
-CNC 1,448875,448880,448836,448841,448848,448887,486080,486223,486216
-CNC 2,488985,488990,489189,489214,489164,489019,489256,489257,489046
-CNC 3,489365,489370,489505,489530,489540,489387,489578,489579,489724
+CNC 1,73060,73055,73254,73259,73264,73047,73307,73287,73284
+CNC 2,73184,73179,73352,73357,73362,73171,73399,73385,73382
 Values,CESMII-CNC,3113935,9.2928,0,10.4108,4,2,100,2
 ,CESMII-CNC,3113935,9.2928,0,10.4108,4,4,200,5
 ,CESMII-CNC,3113935,8,0,-8.04,3,6,300,9
