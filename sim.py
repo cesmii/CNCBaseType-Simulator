@@ -5,10 +5,12 @@ import time
 import smiputils
 import config
 import sys
+import os 
 
 sm_utils = smiputils.utils(config.smip["authenticator"], config.smip["password"], config.smip["name"], config.smip["role"], config.smip["url"], config.smip["verbose"])
 CNC_Num = sm_utils.smipgraphql.args.optional
-data_file = "cnc_values.csv"
+dir_path = os.path.dirname(os.path.realpath(__file__))
+data_file = os.path.join(dir_path, "cnc_values.csv")
 hidden_parent_id = "449036" #CNC
 shown_parent_id = "28221" #CESMII
 instance_ids = ["448631", "488962", "489328"] #
