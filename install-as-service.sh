@@ -40,8 +40,8 @@ if [ $(which systemctl) ]; then
     systemctl daemon-reload
 
     echo "Starting Service"
-    systemctl enable $SVCNAME.service
-    systemctl start $SVCNAME.service
+    systemctl enable $SVCNAME
+    systemctl start $SVCNAME
 else
     echo "systemd not found, service could not be installed"
 fi
