@@ -1,3 +1,4 @@
+import ssl
 import json
 import csv
 from datetime import datetime
@@ -6,8 +7,9 @@ import smiputils
 import config
 import sys
 import os 
-import paho.mqtt
-import paho.mqtt.client as mqtt
+from paho import mqtt
+import paho.mqtt.client as paho
+import paho.mqtt.publish as publish
 
 sink = config.sim["sink"]
 sm_utils = smiputils.utils(config.smip["authenticator"], config.smip["password"], config.smip["name"], config.smip["role"], config.smip["url"], config.smip["verbose"])
@@ -58,10 +60,6 @@ def change_parent(parent_id):
     sm_utils.update_parent(parent_id, instance_ids[CNC_Num-1])
     print("Updating parent. End time: "  + str(datetime.utcnow()))
 
-def on_publish(client,userdata,result):             #create function for callback
-    print("Data published \n")
-    pass
-
 def run_sim():
     labels = import_file()
     if sink == "mqtt":
@@ -102,22 +100,16 @@ def run_sim():
                 sm_utils.multi_tsmutate_aliases(alias_mutates)
             if sink == "mqtt":
                 # Send to Broker
-                print(f"Connecting paho-mqtt version: {paho.mqtt.__version__} with client id {config.mqtt["clientid"]}")
-                if paho.mqtt.__version__[0] > '1':
-                    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, config.mqtt["clientid"])
-                else:
-                    client = mqtt.Client(config.mqtt["clientid"])
-                client.username_pw_set(config.mqtt["username"], config.mqtt["password"])
-                if config.mqtt["tls"] == True:
-                    client.tls_set()
-                client.on_publish = on_publish
-                client.connect(config.mqtt["broker"], config.mqtt["port"])
-
                 data = dict(zip(labels, curr_vals))
                 print(f"Publishing row: ", json.dumps(data))
-                client.publish(config.mqtt["topic"], json.dumps(data), qos=0, retain=False)
 
-                client.disconnect()
+                # use TLS for secure connection with HiveMQ Cloud
+                sslSettings = ssl.SSLContext(mqtt.client.ssl.PROTOCOL_TLS)
+
+                auth = {'username': config.mqtt["username"], 'password': config.mqtt["password"]}
+                publish.single(topic=config.mqtt["topic"], payload=json.dumps(data), hostname=config.mqtt["broker"], port=8883, auth=auth,
+                                tls=sslSettings, protocol=paho.MQTTv31)
+                                
             time.sleep(sample_rate)
     finally:
         print("Cleaning up")
