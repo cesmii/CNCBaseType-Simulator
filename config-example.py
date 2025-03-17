@@ -18,5 +18,6 @@ mqtt = {
     "username": "YOURUSER",
     "password": "YOURPASSWORD",
     "tls": True,
+    "protocol": 311,
     "topic": "mycnc"
 }
