@@ -103,12 +103,22 @@ def run_sim():
                 data = dict(zip(labels, curr_vals))
                 print(f"Publishing row: ", json.dumps(data))
 
-                # use TLS for secure connection with HiveMQ Cloud
-                sslSettings = ssl.SSLContext(mqtt.client.ssl.PROTOCOL_TLS)
-
+                # Configure security
+                if config.mqtt["tls"]:
+                    sslSettings = ssl.SSLContext(mqtt.client.ssl.PROTOCOL_TLS)
+                else:
+                    sslSettings = None
                 auth = {'username': config.mqtt["username"], 'password': config.mqtt["password"]}
-                publish.single(topic=config.mqtt["topic"], payload=json.dumps(data), hostname=config.mqtt["broker"], port=8883, auth=auth,
-                                tls=sslSettings, protocol=paho.MQTTv31)
+
+                # Configure protocol
+                if config.mqtt["protocol"] == "5":
+                    useprotocol = paho.MQTTv5
+                else:
+                    useprotocol = paho.MQTTv311
+                    
+                # Publish message
+                publish.single(topic=config.mqtt["topic"], payload=json.dumps(data), hostname=config.mqtt["broker"], port=config.mqtt["port"], auth=auth, tls=sslSettings, protocol=useprotocol)
+
                                 
             time.sleep(sample_rate)
     finally:
